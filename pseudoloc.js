@@ -5,8 +5,8 @@ pseudoloc = function() {
   pseudoloc.option = {};
   pseudoloc.reset = function() {
     pseudoloc.option = {
-      prepend: "[!!",
-      append: "!!]",
+      prepend: "[!",
+      append: "!]",
       delimiter: "%",
       startDelimiter: "",
       endDelimiter: "",
@@ -63,15 +63,21 @@ pseudoloc = function() {
     Z: String.fromCharCode(377, 379, 381, 437),
     z: String.fromCharCode(378, 380, 382, 438)
   };
+  pseudoloc.padStr = " one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty";
   pseudoloc.pad = function(str, percent) {
-    var len = Math.floor(str.length * percent), pStr = str;
-    while (len--) {
-      pStr += " ";
+    var padStr = pseudoloc.padStr;
+    var len = Math.floor(str.length * percent) - pseudoloc.option.prepend.length - pseudoloc.option.append.length, pStr = str;
+    while (padStr.length < len) {
+      padStr += padStr;
+    }
+    if (len > 0) {
+      pStr += padStr.substr(0, len);
     }
     return pStr;
   };
   pseudoloc.str = function(str) {
     var opts = pseudoloc.option, startdelim = opts.startDelimiter || opts.delimiter, enddelim = opts.endDelimiter || opts.delimiter, re = new RegExp(startdelim + "\\s*[\\w\\.\\s*]+\\s*" + enddelim, "g"), m, tokens = [], i = 0, tokenIdx = 0, result = "", c, pc;
+    str = pseudoloc.pad(str, opts.extend);
     while (m = re.exec(str)) {
       tokens.push(m);
     }
@@ -96,7 +102,7 @@ pseudoloc = function() {
       result += c;
       i++;
     }
-    return opts.prepend + pseudoloc.pad(result, opts.extend) + opts.append;
+    return opts.prepend + result + opts.append;
   };
   return pseudoloc;
 }();
