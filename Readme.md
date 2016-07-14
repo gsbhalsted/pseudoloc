@@ -4,7 +4,7 @@ _Pseudoloc_ is a small library for quickly pseudolocalizing strings. [Pseudoloca
 
 ## Using with Node.js
 
-    var pseudoloc = require('pseudoloc');
+    var pseudoloc = require('@timetoknow/pseudoloc');
 
     pseudoloc.str('A test string with a %token%.')
     // [!!Á ţȇšŧ śťřīņğ ŵıţħ ą %token%.!!]
@@ -110,7 +110,7 @@ Default is `undefined`.
 ## Installation
 Using npm:
 
-    $ npm install pseudoloc
+    $ npm install @timetoknow/pseudoloc
 
 ## Building
 
