@@ -76,21 +76,24 @@ pseudoloc = function() {
     return pStr;
   };
   pseudoloc.str = function(str) {
-    var opts = pseudoloc.option, startdelim = opts.startDelimiter || opts.delimiter, enddelim = opts.endDelimiter || opts.delimiter, re = new RegExp(startdelim + "\\s*[\\w\\.\\s*]+\\s*" + enddelim, "g"), m, tokens = [], i = 0, tokenIdx = 0, result = "", c, pc;
+    var opts = pseudoloc.option, startdelim = opts.startDelimiter || opts.delimiter, enddelim = opts.endDelimiter || opts.delimiter, i = 0, result = "", c, pc, inDelimCount = 0;
     str = pseudoloc.pad(str, opts.extend);
-    while (m = re.exec(str)) {
-      tokens.push(m);
-    }
-    var token = tokens[tokenIdx++] || {
-      index: -1
-    };
     while (i < str.length) {
-      if (token.index === i) {
-        result += token[0];
-        i += token[0].length;
-        token = tokens[tokenIdx++] || {
-          index: -1
-        };
+      if (inDelimCount && i === str.indexOf(enddelim, i)) {
+        inDelimCount = Math.max(0, inDelimCount - 1);
+        result += enddelim;
+        i += enddelim.length;
+        continue;
+      }
+      if (i === str.indexOf(startdelim, i)) {
+        inDelimCount += 1;
+        result += startdelim;
+        i += startdelim.length;
+        continue;
+      }
+      if (inDelimCount !== 0) {
+        result += str[i];
+        i++;
         continue;
       }
       c = opts.override !== undefined ? opts.override : str[i];

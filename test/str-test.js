@@ -106,4 +106,19 @@ describe('pseudoloc.str', function() {
 		s1.should.eql('_____________________');
 	});
 
+	it('should support nested begin and end tokens', function() {
+		pseudoloc.option.startDelimiter = '{';
+		pseudoloc.option.endDelimiter = '}';
+		var s1 = pseudoloc.str('test{this {two} thing}string');
+		s1.indexOf('{this {two} thing}').should.not.eql(-1);
+	});
+
+	it('should support multi-character nested begin and end tokens', function() {
+		pseudoloc.option.startDelimiter = '{{';
+		pseudoloc.option.endDelimiter = '}}';
+		var s1 = pseudoloc.str('test{{this {{two}} thing}}string');
+		s1.indexOf('{{this {{two}} thing}}').should.not.eql(-1);
+	});
+
 });
+
